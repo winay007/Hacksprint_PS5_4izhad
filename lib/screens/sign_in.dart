@@ -31,13 +31,13 @@ class SignIn extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-               Container(
-                    width: width,
-                    child: Image.asset(
-                      'assets/images/logo-png.png',
-                      width: width * 0.5,
-                      height: height * 0.3,
-                    )),
+              //  Container(
+              //       width: width,
+              //       child: Image.asset(
+              //         'assets/images/logo-png.png',
+              //         width: width * 0.5,
+              //         height: height * 0.3,
+              //       )),
                 Text('Email', style: TextStyle(fontWeight: FontWeight.bold)),
                 SizedBox(
                   height: height * 0.01,
