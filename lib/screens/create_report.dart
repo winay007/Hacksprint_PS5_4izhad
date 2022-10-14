@@ -154,7 +154,7 @@ class _CreatePostState extends State<CreatePost> {
                           child: ElevatedButton(
                               style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all(
-                                      const Color(0xFFFFD810))),
+                                      Color.fromARGB(255, 22, 18, 1))),
                               onPressed: () {
                                 _submitForm(
                                   title: titleController.text.trim(),
