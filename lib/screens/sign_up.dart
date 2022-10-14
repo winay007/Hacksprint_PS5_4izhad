@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import './home.dart';
+import './sign_in.dart';
+import '../widgets/custom_text_field.dart';
 
 class SignUp extends StatelessWidget {
   SignUp();
@@ -13,7 +16,7 @@ class SignUp extends StatelessWidget {
       String? password,
       isLogin,
       String? username}) async {
-    if (email.isNotEmpty && password.isNotEmpty) {
+    if (email!.isNotEmpty && password!.isNotEmpty) {
       try {
         if (isLogin) {
           await FirebaseAuth.instance
@@ -23,7 +26,7 @@ class SignUp extends StatelessWidget {
               )
               .then(
                 (value) => Navigator.pushReplacement(
-                  context,
+                  context!,
                   MaterialPageRoute(
                     builder: (context) => HomePage(),
                   ),
@@ -39,7 +42,7 @@ class SignUp extends StatelessWidget {
             final _user = FirebaseAuth.instance.currentUser;
             await FirebaseFirestore.instance
                 .collection('users')
-                .doc(_user.uid)
+                .doc(_user?.uid)
                 .set({'username': username});
           });
         }
@@ -64,7 +67,7 @@ class SignUp extends StatelessWidget {
             errorMessage = "Too many requests. Try again later.";
             break;
         }
-        ScaffoldMessenger.of(context).showSnackBar(
+        ScaffoldMessenger.of(context!).showSnackBar(
           SnackBar(
             content: Text(errorMessage),
             backgroundColor: Theme.of(context).errorColor,
@@ -72,7 +75,7 @@ class SignUp extends StatelessWidget {
         );
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
+      ScaffoldMessenger.of(context!).showSnackBar(
         SnackBar(
           content: Text(errorMessage),
           backgroundColor: Theme.of(context).errorColor,
@@ -81,11 +84,7 @@ class SignUp extends StatelessWidget {
     }
   }
 
-  // void logIn() async {
-  //   await FirebaseAuth.instance.signInWithEmailAndPassword(
-  //       email: emailController.text.trim(),
-  //       password: passowrdController.text.trim());
-  // }
+ 
 
   final emailController = TextEditingController();
   final passowrdController = TextEditingController();
@@ -103,7 +102,7 @@ class SignUp extends StatelessWidget {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         elevation: 0,
-        title: Text(
+        title: const Text(
           'Sign Up',
           style: TextStyle(color: Colors.black),
         ),
@@ -167,7 +166,7 @@ class SignUp extends StatelessWidget {
                   child: Container(
                     width: width * 0.6,
                     height: height * 0.06,
-                    padding: EdgeInsets.symmetric(vertical: 10),
+                    padding:const EdgeInsets.symmetric(vertical: 10),
                     child: InkWell(
                       onTap: () => Navigator.pushReplacement(
                           context,
@@ -176,9 +175,9 @@ class SignUp extends StatelessWidget {
                                     logIn: logIn,
                                   ))),
                       child: Row(
-                        children: [
-                          Text("Already have an account? "),
-                          Text(
+                        children:const [
+                       Text("Already have an account? "),
+                        Text(
                             "sign in",
                             style: TextStyle(
                               decoration: TextDecoration.underline,
