@@ -3,6 +3,9 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:flutter/material.dart';
 
 import '../pickers/select_image.dart';
@@ -12,10 +15,49 @@ class CreatePost extends StatefulWidget {
   @override
   State<CreatePost> createState() => _CreatePostState();
 }
+enum Status { 
+   none, 
+   laoding, 
+   laoded
+}
 
 class _CreatePostState extends State<CreatePost> {
-  late File _userImageFile;
+  var _userImageFile;
   var isloading = false;
+  String location = "Get Location ...";
+  Status getLocation = Status.none;
+
+  void _getUserLocation() async {
+    LocationPermission permission;
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.deniedForever) {
+        return Future.error('Location Not Available');
+      }
+    }
+    // else {
+    //   throw Exception('Errorrr');
+    // }
+    Position position = await Geolocator.getCurrentPosition();
+    print(position);
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+    Placemark placemark = placemarks[0];
+    setState(() {
+      location =
+          '${placemark.name}, ${placemark.thoroughfare}, ${placemark.subLocality}, ${placemark.locality}, ${placemark.subAdministrativeArea}, ${placemark.administrativeArea}, ${placemark.postalCode}';
+      getLocation = Status.laoded;
+    });
+    // final coordinates = Coordinates(position.latitude, position.longitude);
+    // var addresses =
+    //     await Geocoder.local.findAddressesFromCoordinates(coordinates);
+    // var first = addresses.first;
+    // location =
+    //     ' ${first.locality}, ${first.adminArea},${first.subLocality}, ${first.subAdminArea},${first.addressLine}, ${first.featureName},${first.thoroughfare}, ${first.subThoroughfare}';
+    // print(
+    //     ' ${first.locality}, ${first.adminArea},${first.subLocality}, ${first.subAdminArea},${first.addressLine}, ${first.featureName},${first.thoroughfare}, ${first.subThoroughfare}');
+  }
 
   void _submitForm(
       {required String title,
@@ -120,6 +162,32 @@ class _CreatePostState extends State<CreatePost> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Container(
+                      width: double.infinity,
+                      child: Row(
+                        children: [
+                          getLocation
+                              ? IconButton(  
+                                  onPressed:  _getUserLocation,
+                                  icon: const Icon(
+                                    Icons.location_on,
+                                    color: Colors.green,
+                                  ))
+                              :const Icon(Icons.location_on, color: Colors.grey),
+                          SizedBox(width: 5,),
+                          Container(
+                            padding: EdgeInsets.symmetric(vertical:10,horizontal: 5),
+                            width:getLocation? 100:280 ,
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Container(
+                                child: Text(location),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                     SelectImage(
                       size: size,
                       imagePickFn: _pickedImage,
@@ -156,12 +224,12 @@ class _CreatePostState extends State<CreatePost> {
                                   backgroundColor: MaterialStateProperty.all(
                                       const Color(0xFFFFD810))),
                               onPressed: () {
-                                // _submitForm(
-                                //   title: titleController.text.trim(),
-                                //   description: descController.text.trim(),
-                                //   image: _userImageFile,
-                                //   context: context,
-                                // );
+                                _submitForm(
+                                  title: titleController.text.trim(),
+                                  description: descController.text.trim(),
+                                  image: _userImageFile,
+                                  context: context,
+                                );
                               },
                               child: const Text('Create Post'))),
                     )

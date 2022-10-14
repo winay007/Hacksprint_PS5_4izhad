@@ -19,7 +19,7 @@ class SelectImage extends StatefulWidget {
 }
 
 class _SelectImageState extends State<SelectImage> {
-  late File image;
+  var image;
 
   void pickImage() async {
     try {

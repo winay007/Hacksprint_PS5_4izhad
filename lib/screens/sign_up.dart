@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:road_app/bottom_navigation_bar.dart';
 import './home.dart';
 import './sign_in.dart';
 import '../widgets/custom_text_field.dart';
@@ -10,13 +11,14 @@ class SignUp extends StatelessWidget {
 
   String errorMessage = "Please enter your credentials";
   //  final _user = FirebaseAuth.instance.currentUser;
-  void logIn(
-      {BuildContext? context,
-      required String email,
-      required String password,
-      isLogin,
-      String? username}) async {
-    if (email!.isNotEmpty && password!.isNotEmpty) {
+  void logIn({
+    BuildContext? context,
+    email,
+    password,
+    isLogin,
+    username,
+  }) async {
+    if (email?.isNotEmpty && password?.isNotEmpty) {
       try {
         if (isLogin) {
           await FirebaseAuth.instance
@@ -28,7 +30,7 @@ class SignUp extends StatelessWidget {
                 (value) => Navigator.pushReplacement(
                   context!,
                   MaterialPageRoute(
-                    builder: (context) => HomePage(),
+                    builder: (context) => NavigationFile(),
                   ),
                 ),
               );
@@ -66,7 +68,12 @@ class SignUp extends StatelessWidget {
           case "too-many-requests":
             errorMessage = "Too many requests. Try again later.";
             break;
+          default:
+            errorMessage = "hellow + ${error.toString()}";
         }
+        print(email + "kkkkkkkkkkk");
+        print(password + "jjjjjjjjj");
+
         ScaffoldMessenger.of(context!).showSnackBar(
           SnackBar(
             content: Text(errorMessage),
@@ -75,16 +82,16 @@ class SignUp extends StatelessWidget {
         );
       }
     } else {
+      print(email);
+      print(password);
       ScaffoldMessenger.of(context!).showSnackBar(
         SnackBar(
-          content: Text(errorMessage),
+          content: Text(errorMessage + "he"),
           backgroundColor: Theme.of(context).errorColor,
         ),
       );
     }
   }
-
- 
 
   final emailController = TextEditingController();
   final passowrdController = TextEditingController();
@@ -113,13 +120,6 @@ class SignUp extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                    width: width,
-                    child: Image.asset(
-                      'assets/images/logo-png.png',
-                      width: width * 0.5,
-                      height: height * 0.3,
-                    )),
                 Text('UserName', style: TextStyle(fontWeight: FontWeight.bold)),
                 SizedBox(height: height * 0.01),
                 CustomTextField(
@@ -151,11 +151,12 @@ class SignUp extends StatelessWidget {
                               MaterialStateProperty.all(Color(0xff11586b))),
                       onPressed: () {
                         logIn(
-                            context: context,
-                            email: emailController.text.trim(),
-                            password: passowrdController.text.trim(),
-                            username: usernameController.text.trim(),
-                            isLogin: false);
+                          context: context,
+                          email: emailController.text.trim(),
+                          password: passowrdController.text.trim(),
+                          username: usernameController.text.trim(),
+                          isLogin: false,
+                        );
                       },
                       child: Text("Sign-Up"),
                     ),
@@ -166,7 +167,7 @@ class SignUp extends StatelessWidget {
                   child: Container(
                     width: width * 0.6,
                     height: height * 0.06,
-                    padding:const EdgeInsets.symmetric(vertical: 10),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
                     child: InkWell(
                       onTap: () => Navigator.pushReplacement(
                           context,
@@ -175,9 +176,9 @@ class SignUp extends StatelessWidget {
                                     logIn: logIn,
                                   ))),
                       child: Row(
-                        children:const [
-                       Text("Already have an account? "),
-                        Text(
+                        children: const [
+                          Text("Already have an account? "),
+                          Text(
                             "sign in",
                             style: TextStyle(
                               decoration: TextDecoration.underline,
