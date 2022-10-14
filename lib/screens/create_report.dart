@@ -14,7 +14,7 @@ class CreatePost extends StatefulWidget {
 }
 
 class _CreatePostState extends State<CreatePost> {
-  late File _userImageFile;
+  var _userImageFile;
   var isloading = false;
 
   void _submitForm(
@@ -156,12 +156,12 @@ class _CreatePostState extends State<CreatePost> {
                                   backgroundColor: MaterialStateProperty.all(
                                       const Color(0xFFFFD810))),
                               onPressed: () {
-                                // _submitForm(
-                                //   title: titleController.text.trim(),
-                                //   description: descController.text.trim(),
-                                //   image: _userImageFile,
-                                //   context: context,
-                                // );
+                                _submitForm(
+                                  title: titleController.text.trim(),
+                                  description: descController.text.trim(),
+                                  image: _userImageFile,
+                                  context: context,
+                                );
                               },
                               child: const Text('Create Post'))),
                     )
