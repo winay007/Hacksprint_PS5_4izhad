@@ -2,6 +2,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:road_app/bottom_navigation_bar.dart';
 import './screens/home.dart';
 import './screens/sign_up.dart';
 
@@ -25,7 +26,7 @@ class AppWidget extends StatelessWidget {
                 child: Text('Something went wrong!'),
               );
             } else if (snapshot.hasData) {
-              return HomePage();
+              return NavigationFile();
             } else {
               return SignUp();
             }

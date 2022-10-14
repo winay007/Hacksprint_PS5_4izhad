@@ -12,8 +12,8 @@ class SignUp extends StatelessWidget {
   //  final _user = FirebaseAuth.instance.currentUser;
   void logIn(
       {BuildContext? context,
-      String? email,
-      String? password,
+      required String email,
+      required String password,
       isLogin,
       String? username}) async {
     if (email!.isNotEmpty && password!.isNotEmpty) {
