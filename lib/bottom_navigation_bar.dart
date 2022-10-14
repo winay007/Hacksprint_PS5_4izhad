@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:road_app/home.dart';
+import 'package:road_app/screens/create_report.dart';
 
 // import './screens/feed_screen.dart';
 class NavigationFile extends StatefulWidget {
@@ -21,7 +23,10 @@ class _NavigationFileState extends State<NavigationFile> {
   }
 
   // Different pages to navigate to
-  final List<Widget> _children = [];
+  final List<Widget> _children = [
+    const HomePage(),
+    CreatePost(),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -29,15 +34,15 @@ class _NavigationFileState extends State<NavigationFile> {
       backgroundColor: Colors.orange.shade50,
       body: _children[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.orange.shade100,
+        backgroundColor: const Color.fromARGB(255, 208, 238, 17),
         currentIndex: _selectedIndex,
         onTap: _navigateBottomBar,
         type: BottomNavigationBarType.fixed,
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.track_changes_outlined),
-            label: 'Track progress',
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.track_changes_outlined),
+          //   label: 'Track progress',
+          // ),
 
           // BottomNavigationBarItem(
           //   activeIcon: Icon(Icons.bookmark),
@@ -55,11 +60,11 @@ class _NavigationFileState extends State<NavigationFile> {
             label: 'Report',
           ),
 
-          BottomNavigationBarItem(
-            activeIcon: Icon(Icons.settings_rounded),
-            icon: Icon(Icons.settings_outlined),
-            label: 'Settings',
-          ),
+          // BottomNavigationBarItem(
+          //   activeIcon: Icon(Icons.settings_rounded),
+          //   icon: Icon(Icons.settings_outlined),
+          //   label: 'Settings',
+          // ),
         ],
       ),
     );

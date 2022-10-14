@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:road_app/screens/sign_in.dart';
+
+import '../home.dart';
+import '../widgets/custom_text_field.dart';
 
 class SignUp extends StatelessWidget {
   SignUp();
@@ -9,8 +13,8 @@ class SignUp extends StatelessWidget {
   //  final _user = FirebaseAuth.instance.currentUser;
   void logIn(
       {BuildContext? context,
-      String? email,
-      String? password,
+      required String email,
+      required String password,
       isLogin,
       String? username}) async {
     if (email.isNotEmpty && password.isNotEmpty) {
@@ -23,7 +27,7 @@ class SignUp extends StatelessWidget {
               )
               .then(
                 (value) => Navigator.pushReplacement(
-                  context,
+                  context!,
                   MaterialPageRoute(
                     builder: (context) => HomePage(),
                   ),
@@ -39,7 +43,7 @@ class SignUp extends StatelessWidget {
             final _user = FirebaseAuth.instance.currentUser;
             await FirebaseFirestore.instance
                 .collection('users')
-                .doc(_user.uid)
+                .doc(_user?.uid)
                 .set({'username': username});
           });
         }
@@ -64,7 +68,7 @@ class SignUp extends StatelessWidget {
             errorMessage = "Too many requests. Try again later.";
             break;
         }
-        ScaffoldMessenger.of(context).showSnackBar(
+        ScaffoldMessenger.of(context!).showSnackBar(
           SnackBar(
             content: Text(errorMessage),
             backgroundColor: Theme.of(context).errorColor,
@@ -72,7 +76,7 @@ class SignUp extends StatelessWidget {
         );
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
+      ScaffoldMessenger.of(context!).showSnackBar(
         SnackBar(
           content: Text(errorMessage),
           backgroundColor: Theme.of(context).errorColor,
@@ -167,7 +171,7 @@ class SignUp extends StatelessWidget {
                   child: Container(
                     width: width * 0.6,
                     height: height * 0.06,
-                    padding: EdgeInsets.symmetric(vertical: 10),
+                    padding:const EdgeInsets.symmetric(vertical: 10),
                     child: InkWell(
                       onTap: () => Navigator.pushReplacement(
                           context,
@@ -176,7 +180,7 @@ class SignUp extends StatelessWidget {
                                     logIn: logIn,
                                   ))),
                       child: Row(
-                        children: [
+                        children:const [
                           Text("Already have an account? "),
                           Text(
                             "sign in",

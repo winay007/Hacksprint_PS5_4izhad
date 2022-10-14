@@ -1,18 +1,14 @@
 import 'dart:io';
 
-// import 'package:blog_minimal/widgets/custom_text_field.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:firebase_storage/firebase_storage.dart';
-// import 'package:file_picker/file_picker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
+import '../pickers/select_image.dart';
 import '../widgets/custom_textfield.dart';
-// import '../pickers/select_image.dart';
 
 class CreatePost extends StatefulWidget {
-  CreatePost({required Key key}) : super(key: key);
-
   @override
   State<CreatePost> createState() => _CreatePostState();
 }
@@ -20,68 +16,73 @@ class CreatePost extends StatefulWidget {
 class _CreatePostState extends State<CreatePost> {
   late File _userImageFile;
   var isloading = false;
-  
 
-  // void _submitForm(
-  //     {required String title,
-  //     required String description,
-  //     required File image,
-  //     required BuildContext context}) async {
-  //   try {
-  //     if (title.isNotEmpty &&
-  //         description.isNotEmpty &&
-  //         _userImageFile != null) {
-  //       setState(() {
-  //         isloading = true;
-  //       });
+  void _submitForm(
+      {required String title,
+      required String description,
+      required File image,
+      required BuildContext context}) async {
+    try {
+      if (title.isNotEmpty &&
+          description.isNotEmpty &&
+          _userImageFile != null) {
+        setState(() {
+          isloading = true;
+        });
 
-  //       final _user = FirebaseAuth.instance.currentUser;
+        final _user = FirebaseAuth.instance.currentUser;
 
-  //       final user = await FirebaseFirestore.instance
-  //           .collection('users')
-  //           .doc(_user.uid)
-  //           .get();
-  //       final author = user['username'];
+        final user = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(_user?.uid)
+            .get();
+        final author = user['username'];
 
-  //       final ref = FirebaseStorage.instance
-  //           .ref('user_images/${Timestamp.now().toString()}');
+        final ref = FirebaseStorage.instance
+            .ref('report_images/${Timestamp.now().toString()}');
 
-  //       await ref.putFile(image);
+        await ref.putFile(image);
 
-  //       final url = await ref.getDownloadURL();
+        final url = await ref.getDownloadURL();
 
-  //       DateTime now = new DateTime.now();
-  //       DateTime date = new DateTime(now.year, now.month, now.day);
+        DateTime now = new DateTime.now();
+        DateTime date = new DateTime(now.year, now.month, now.day);
 
-  //       await FirebaseFirestore.instance.collection('blogs').doc().set({
-  //         'title': title,
-  //         'content': description,
-  //         'imageUrl': url,
-  //         'publisher': author,
-  //         'date': date.toString().substring(0, 10),
-  //       });
+        await FirebaseFirestore.instance.collection('reports').doc().set({
+          'title': title,
+          'content': description,
+          'imageUrl': url,
+          'publisher': author,
+          'date': date.toString().substring(0, 10),
+        });
 
-  //       setState(() {
-  //         isloading = false;
-  //       });
-  //        ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(
-  //           content: Text("Published successfully"),
-  //           backgroundColor: Colors.green,
-  //         ),
-  //       );
-  //     } else {
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(
-  //           content: Text("Please fill up all the fields"),
-  //           backgroundColor: Theme.of(context).errorColor,
-  //         ),
-  //       );
-  //     }
-  //   } on FirebaseException catch (e) {
-  //     print(e);
-  //   }
-  // }
+        setState(() {
+          isloading = false;
+        });
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Published successfully"),
+            backgroundColor: Colors.green,
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text("Please fill up all the fields"),
+            backgroundColor: Theme.of(context).errorColor,
+          ),
+        );
+      }
+    } on FirebaseException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.toString()),
+          backgroundColor: Colors.green,
+        ),
+      );
+    }
+  }
 
   void _pickedImage(File image) {
     _userImageFile = image;
@@ -101,13 +102,13 @@ class _CreatePostState extends State<CreatePost> {
         iconTheme: Theme.of(context).iconTheme,
         backgroundColor: Colors.white,
         elevation: 0,
-        title: Text(
+        title: const Text(
           'Create Post',
           style: TextStyle(color: Colors.black),
         ),
       ),
       body: isloading
-          ? Center(
+          ? const Center(
               child: CircularProgressIndicator(),
             )
           : SingleChildScrollView(
@@ -119,12 +120,12 @@ class _CreatePostState extends State<CreatePost> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // SelectImage(
-                    //   size: size,
-                    //   imagePickFn: _pickedImage,
-                    // ),
+                    SelectImage(
+                      size: size,
+                      imagePickFn: _pickedImage,
+                    ),
                     SizedBox(height: size.height * 0.025),
-                    Text(
+                    const Text(
                       'Title',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -136,14 +137,14 @@ class _CreatePostState extends State<CreatePost> {
                       controller: titleController,
                     ),
                     SizedBox(height: size.height * 0.03),
-                    Text(
+                    const Text(
                       'Description',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: size.height * 0.005),
                     CustomTextField(
                       hint: 'Enter Description',
-                      controller: descController, 
+                      controller: descController,
                     ),
                     SizedBox(height: size.height * 0.02),
                     Align(
@@ -153,7 +154,7 @@ class _CreatePostState extends State<CreatePost> {
                           child: ElevatedButton(
                               style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all(
-                                      Color(0xFFFFD810))),
+                                      const Color(0xFFFFD810))),
                               onPressed: () {
                                 // _submitForm(
                                 //   title: titleController.text.trim(),
@@ -162,7 +163,7 @@ class _CreatePostState extends State<CreatePost> {
                                 //   context: context,
                                 // );
                               },
-                              child: Text('Create Post'))),
+                              child: const Text('Create Post'))),
                     )
                   ],
                 ),
