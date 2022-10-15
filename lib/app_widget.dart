@@ -30,6 +30,7 @@ class AppWidget extends StatelessWidget {
               return SignUp();
             }
           }),
+      routes: {NavigationFile.routeName: (context) => NavigationFile()},
     );
   }
 }

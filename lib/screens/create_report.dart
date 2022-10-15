@@ -7,6 +7,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:road_app/bottom_navigation_bar.dart';
 
 import '../pickers/select_image.dart';
 import '../widgets/custom_textfield.dart';
@@ -50,11 +52,15 @@ class _CreatePostState extends State<CreatePost> {
   void _submitForm(
       {required String title,
       required String description,
-      required File image,
+      required image,
+      required String location,
+      required String category,
       required BuildContext context}) async {
     try {
       if (title.isNotEmpty &&
           description.isNotEmpty &&
+          category != ' ' &&
+          location != 'Get Location ...' &&
           _userImageFile != null) {
         setState(() {
           isloading = true;
@@ -84,11 +90,17 @@ class _CreatePostState extends State<CreatePost> {
           'imageUrl': url,
           'publisher': author,
           'date': date.toString().substring(0, 10),
+          'location': location,
+          'category': category,
         });
 
         setState(() {
           isloading = false;
         });
+        descController.text = "";
+        titleController.text = "";
+        location = "";
+        dropDownValue = " ";
         // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -96,6 +108,8 @@ class _CreatePostState extends State<CreatePost> {
             backgroundColor: Colors.green,
           ),
         );
+        // Navigator.restorablePushReplacementNamed(
+        //     context, NavigationFile.routeName);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -120,7 +134,20 @@ class _CreatePostState extends State<CreatePost> {
 
   final titleController = TextEditingController();
   final descController = TextEditingController();
-  var issues = ["item 1"];
+  var issues = [
+    "speed breakers",
+    "path hole",
+    "water logging",
+    "zebra crossing",
+    "poor sidewalks",
+    "road safety signs",
+    "insufficient lighting",
+    "non-availabilty of signals",
+    "accident-prone areas",
+    "others",
+    " "
+  ];
+  String dropDownValue = " ";
 
   @override
   Widget build(BuildContext context) {
@@ -150,27 +177,6 @@ class _CreatePostState extends State<CreatePost> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        const Text(
-                          "Select the category",
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.fromLTRB(30, 0, 0, 0),
-                          child: DropdownButton(
-                              value: "item 1",
-                              items: issues.map((String items) {
-                                return DropdownMenuItem(
-                                  value: items,
-                                  child: Text(items),
-                                );
-                              }).toList(),
-                              onChanged: (String? newValue) {}),
-                        ),
-                      ],),
                     Container(
                       width: double.infinity,
                       child: Row(
@@ -192,7 +198,10 @@ class _CreatePostState extends State<CreatePost> {
                           Container(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 10, horizontal: 5),
-                            width: getLocation == Status.none || getLocation == Status.laoding ? 100 : 280,
+                            width: getLocation == Status.none ||
+                                    getLocation == Status.laoding
+                                ? 100
+                                : 280,
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Container(
@@ -202,6 +211,43 @@ class _CreatePostState extends State<CreatePost> {
                           ),
                         ],
                       ),
+                    ),
+                    Row(
+                      // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        const Text(
+                          "Select the category",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        Container(
+                          // width: 20,
+                          margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                          child: DropdownButton(
+                              icon: const Icon(
+                                Icons.arrow_drop_down,
+                                size: 20,
+                              ),
+                              underline: Container(
+                                height: 2,
+                                color: Colors.deepPurpleAccent, //<-- SEE HERE
+                              ),
+                              focusColor: Colors.black,
+                              iconSize: 10,
+                              value: dropDownValue,
+                              items: issues.map((String items) {
+                                return DropdownMenuItem(
+                                  value: items,
+                                  child: Text(items),
+                                );
+                              }).toList(),
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  dropDownValue = newValue!;
+                                });
+                              }),
+                        ),
+                      ],
                     ),
                     SelectImage(
                       size: size,
@@ -240,13 +286,15 @@ class _CreatePostState extends State<CreatePost> {
                                       const Color.fromARGB(255, 22, 18, 1))),
                               onPressed: () {
                                 _submitForm(
+                                  location: location,
+                                  category: dropDownValue,
                                   title: titleController.text.trim(),
                                   description: descController.text.trim(),
                                   image: _userImageFile,
                                   context: context,
                                 );
                               },
-                              child: const Text('Create Post'))),
+                              child: const Text('Report '))),
                     )
                   ],
                 ),

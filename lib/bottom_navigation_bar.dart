@@ -12,7 +12,7 @@ class NavigationFile extends StatefulWidget {
 }
 
 class _NavigationFileState extends State<NavigationFile> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
 
   @override
   void initState() {}
@@ -27,7 +27,6 @@ class _NavigationFileState extends State<NavigationFile> {
   final List<Widget> _children = [
     CreatePost(),
     const HomePage(),
-    TrackProgress(),
   ];
 
   @override
@@ -56,17 +55,6 @@ class _NavigationFileState extends State<NavigationFile> {
             icon: Icon(Icons.home_outlined),
             label: 'Home',
           ),
-
-          BottomNavigationBarItem(
-            activeIcon: Icon(Icons.track_changes_outlined),
-            icon: Icon(Icons.track_changes_outlined),
-            label: 'Track progress',
-          ),
-          // BottomNavigationBarItem(
-          //   activeIcon: Icon(Icons.settings_rounded),
-          //   icon: Icon(Icons.settings_outlined),
-          //   label: 'Settings',
-          // ),
         ],
       ),
     );
