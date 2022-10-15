@@ -15,11 +15,8 @@ class CreatePost extends StatefulWidget {
   @override
   State<CreatePost> createState() => _CreatePostState();
 }
-enum Status { 
-   none, 
-   laoding, 
-   laoded
-}
+
+enum Status { none, laoding, laoded }
 
 class _CreatePostState extends State<CreatePost> {
   var _userImageFile;
@@ -28,6 +25,7 @@ class _CreatePostState extends State<CreatePost> {
   Status getLocation = Status.none;
 
   void _getUserLocation() async {
+    getLocation = Status.laoding;
     LocationPermission permission;
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
@@ -36,9 +34,7 @@ class _CreatePostState extends State<CreatePost> {
         return Future.error('Location Not Available');
       }
     }
-    // else {
-    //   throw Exception('Errorrr');
-    // }
+
     Position position = await Geolocator.getCurrentPosition();
     print(position);
     List<Placemark> placemarks =
@@ -49,14 +45,6 @@ class _CreatePostState extends State<CreatePost> {
           '${placemark.name}, ${placemark.thoroughfare}, ${placemark.subLocality}, ${placemark.locality}, ${placemark.subAdministrativeArea}, ${placemark.administrativeArea}, ${placemark.postalCode}';
       getLocation = Status.laoded;
     });
-    // final coordinates = Coordinates(position.latitude, position.longitude);
-    // var addresses =
-    //     await Geocoder.local.findAddressesFromCoordinates(coordinates);
-    // var first = addresses.first;
-    // location =
-    //     ' ${first.locality}, ${first.adminArea},${first.subLocality}, ${first.subAdminArea},${first.addressLine}, ${first.featureName},${first.thoroughfare}, ${first.subThoroughfare}';
-    // print(
-    //     ' ${first.locality}, ${first.adminArea},${first.subLocality}, ${first.subAdminArea},${first.addressLine}, ${first.featureName},${first.thoroughfare}, ${first.subThoroughfare}');
   }
 
   void _submitForm(
@@ -166,18 +154,24 @@ class _CreatePostState extends State<CreatePost> {
                       width: double.infinity,
                       child: Row(
                         children: [
-                          getLocation
-                              ? IconButton(  
-                                  onPressed:  _getUserLocation,
-                                  icon: const Icon(
-                                    Icons.location_on,
-                                    color: Colors.green,
-                                  ))
-                              :const Icon(Icons.location_on, color: Colors.grey),
-                          SizedBox(width: 5,),
+                          if (getLocation == Status.none)
+                            IconButton(
+                                onPressed: _getUserLocation,
+                                icon: const Icon(
+                                  Icons.location_on,
+                                  color: Colors.green,
+                                )),
+                          if (getLocation == Status.laoding)
+                            const CircularProgressIndicator(),
+                          if (getLocation == Status.laoded)
+                            const Icon(Icons.location_on, color: Colors.grey),
+                          const SizedBox(
+                            width: 5,
+                          ),
                           Container(
-                            padding: EdgeInsets.symmetric(vertical:10,horizontal: 5),
-                            width:getLocation? 100:280 ,
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 5),
+                            width: getLocation == Status.none || getLocation == Status.laoding ? 100 : 280,
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Container(
@@ -222,7 +216,7 @@ class _CreatePostState extends State<CreatePost> {
                           child: ElevatedButton(
                               style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all(
-                                      const Color(0xFFFFD810))),
+                                      Color.fromARGB(255, 22, 18, 1))),
                               onPressed: () {
                                 _submitForm(
                                   title: titleController.text.trim(),

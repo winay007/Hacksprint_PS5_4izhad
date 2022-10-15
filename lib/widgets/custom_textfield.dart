@@ -15,7 +15,7 @@ class CustomTextField extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 20),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: Colors.yellow)),
+            border: Border.all(color: Color.fromARGB(255, 22, 18, 1))),
         child: TextFormField(
           controller: controller,
           maxLines: 2,

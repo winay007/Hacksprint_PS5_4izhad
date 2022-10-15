@@ -53,7 +53,10 @@ class _SelectImageState extends State<SelectImage> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.yellow),
+        // borderRadius: BorderRadius.circular(5),
+        border: Border.all(
+          color: const Color.fromARGB(255, 22, 18, 1),
+        ),
       ),
       margin: EdgeInsets.symmetric(horizontal: widget.size.width * 0.05),
       child: Material(
@@ -61,7 +64,7 @@ class _SelectImageState extends State<SelectImage> {
           onTap: () async {
             pickImage();
           },
-          splashColor: Colors.yellow,
+          splashColor: const Color.fromARGB(255, 36, 32, 16),
           child: image != null
               ? Image.file(
                   image,
