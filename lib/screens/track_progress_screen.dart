@@ -93,11 +93,8 @@ class _TrackProgressState extends State<TrackProgress> {
             ),
           ),
           Container(
-              height: 200,
-              margin: const EdgeInsets.symmetric(
-                horizontal: 30,
-                vertical: 20,
-              ),
+              height: 300,
+              margin: const EdgeInsets.fromLTRB(30, 70, 30, 20),
               decoration: const BoxDecoration(
                 border: Border(
                   left: BorderSide(
@@ -110,7 +107,7 @@ class _TrackProgressState extends State<TrackProgress> {
                 itemBuilder: ((context, index) {
                   return CustomWidget();
                 }),
-                itemCount: 10,
+                itemCount: 6,
               ))
         ],
       ),

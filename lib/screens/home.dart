@@ -14,7 +14,13 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Road App"),
+        iconTheme: Theme.of(context).iconTheme,
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: const Text(
+          'Road app',
+          style: TextStyle(color: Colors.black),
+        ),
       ),
       body: StreamBuilder(
           stream: FirebaseFirestore.instance.collection("reports").snapshots(),
@@ -29,12 +35,11 @@ class _HomePageState extends State<HomePage> {
                 itemBuilder: (BuildContext context, int index) {
                   final data = allData[index];
                   return CustomWidget(
-                    imageurl: data['imageUrl'],
-                    content: data['content'],
-                    title: data['title'],
-                    username: data['publisher'],
-                    date: data['date']
-                  );
+                      imageurl: data['imageUrl'],
+                      content: data['content'],
+                      title: data['title'],
+                      username: data['publisher'],
+                      date: data['date']);
                 },
                 itemCount: allData.length,
               );
@@ -94,11 +99,12 @@ class CustomWidget extends StatelessWidget {
                 children: [
                   InkWell(
                     onTap: () {
-                      Navigator.pushNamed(context, TrackProgress.routeName, arguments: {
-                        'username': username,
-                        'title': title,
-                        'date': date,
-                      });
+                      Navigator.pushNamed(context, TrackProgress.routeName,
+                          arguments: {
+                            'username': username,
+                            'title': title,
+                            'date': date,
+                          });
                     },
                     child: Container(
                       color: Colors.red,
