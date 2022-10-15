@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class TrackProgress extends StatefulWidget {
-  const TrackProgress({super.key});
+  TrackProgress({
+    super.key,
+  });
 
   static const String routeName = '/track_progress';
   @override
@@ -11,6 +13,8 @@ class TrackProgress extends StatefulWidget {
 class _TrackProgressState extends State<TrackProgress> {
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, String>;
     return Scaffold(
       appBar: AppBar(
         iconTheme: Theme.of(context).iconTheme,
@@ -24,8 +28,17 @@ class _TrackProgressState extends State<TrackProgress> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          SizedBox(
-              height: 200, child: Image.asset("assets/images/authority.png")),
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 20),
+            child: Text(
+              args['title'] as String,
+              style: TextStyle(fontSize: 50),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 10),
+            child: Text(args['username'] as String),
+          ),
           Container(
             margin: const EdgeInsets.fromLTRB(0, 40, 0, 0),
             width: 500,
@@ -70,18 +83,23 @@ class _TrackProgressState extends State<TrackProgress> {
             width: 500,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Icon(Icons.alarm),
+              children: [
+                const Icon(Icons.alarm),
+                Text(args['date'] as String),
                 Icon(Icons.done),
               ],
             ),
           ),
           Container(
               height: 200,
+              margin: const EdgeInsets.symmetric(
+                horizontal: 30,
+                vertical: 20,
+              ),
               decoration: const BoxDecoration(
-                border:  Border(
+                border: Border(
                   left: BorderSide(
-                    color: Colors.black12,
+                    color: Colors.purple,
                     width: 8,
                   ),
                 ),
@@ -109,14 +127,30 @@ class _CustomWidgetState extends State<CustomWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+      decoration: const BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+        color: Colors.black,
+      ))),
+      margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
       width: 300,
       child: Row(
         children: [
           Container(
-            child: Text('12 Oct'),
+            child: const Text(
+              '12 Oct',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
-          Expanded(child: Container(child: Text('Officer Inspected'),))
+          Expanded(
+              child: Container(
+            alignment: Alignment.center,
+            margin: EdgeInsets.symmetric(horizontal: 15),
+            child: Text('Officer Inspected'),
+          ))
         ],
       ),
     );

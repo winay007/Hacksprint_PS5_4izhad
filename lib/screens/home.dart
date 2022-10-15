@@ -32,6 +32,8 @@ class _HomePageState extends State<HomePage> {
                     imageurl: data['imageUrl'],
                     content: data['content'],
                     title: data['title'],
+                    username: data['publisher'],
+                    date: data['date']
                   );
                 },
                 itemCount: allData.length,
@@ -49,10 +51,14 @@ class CustomWidget extends StatelessWidget {
     required this.content,
     required this.imageurl,
     required this.title,
+    required this.username,
+    required this.date,
   });
   String imageurl;
   String title;
   String content;
+  String username;
+  String date;
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +94,11 @@ class CustomWidget extends StatelessWidget {
                 children: [
                   InkWell(
                     onTap: () {
-                      Navigator.pushNamed(context, TrackProgress.routeName);
+                      Navigator.pushNamed(context, TrackProgress.routeName, arguments: {
+                        'username': username,
+                        'title': title,
+                        'date': date,
+                      });
                     },
                     child: Container(
                       color: Colors.red,
