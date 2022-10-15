@@ -3,6 +3,9 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:flutter/material.dart';
 
 import '../pickers/select_image.dart';
@@ -13,9 +16,36 @@ class CreatePost extends StatefulWidget {
   State<CreatePost> createState() => _CreatePostState();
 }
 
+enum Status { none, laoding, laoded }
+
 class _CreatePostState extends State<CreatePost> {
   var _userImageFile;
   var isloading = false;
+  String location = "Get Location ...";
+  Status getLocation = Status.none;
+
+  void _getUserLocation() async {
+    getLocation = Status.laoding;
+    LocationPermission permission;
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.deniedForever) {
+        return Future.error('Location Not Available');
+      }
+    }
+
+    Position position = await Geolocator.getCurrentPosition();
+    print(position);
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+    Placemark placemark = placemarks[0];
+    setState(() {
+      location =
+          '${placemark.name}, ${placemark.thoroughfare}, ${placemark.subLocality}, ${placemark.locality}, ${placemark.subAdministrativeArea}, ${placemark.administrativeArea}, ${placemark.postalCode}';
+      getLocation = Status.laoded;
+    });
+  }
 
   void _submitForm(
       {required String title,
@@ -140,7 +170,38 @@ class _CreatePostState extends State<CreatePost> {
                               }).toList(),
                               onChanged: (String? newValue) {}),
                         ),
-                      ],
+                      ],),
+                    Container(
+                      width: double.infinity,
+                      child: Row(
+                        children: [
+                          if (getLocation == Status.none)
+                            IconButton(
+                                onPressed: _getUserLocation,
+                                icon: const Icon(
+                                  Icons.location_on,
+                                  color: Colors.green,
+                                )),
+                          if (getLocation == Status.laoding)
+                            const CircularProgressIndicator(),
+                          if (getLocation == Status.laoded)
+                            const Icon(Icons.location_on, color: Colors.grey),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 5),
+                            width: getLocation == Status.none || getLocation == Status.laoding ? 100 : 280,
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Container(
+                                child: Text(location),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     SelectImage(
                       size: size,

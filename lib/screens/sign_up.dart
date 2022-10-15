@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:road_app/bottom_navigation_bar.dart';
 import './home.dart';
 import './sign_in.dart';
 import '../widgets/custom_text_field.dart';
@@ -29,7 +30,7 @@ class SignUp extends StatelessWidget {
                 (value) => Navigator.pushReplacement(
                   context!,
                   MaterialPageRoute(
-                    builder: (context) => HomePage(),
+                    builder: (context) => NavigationFile(),
                   ),
                 ),
               );
