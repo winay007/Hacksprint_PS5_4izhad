@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter/src/widgets/container.dart';
-// import 'package:flutter/src/widgets/framework.dart';
+import 'package:road_app/screens/track_progress_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -90,7 +88,7 @@ class CustomWidget extends StatelessWidget {
                 children: [
                   InkWell(
                     onTap: () {
-                      Navigator.push
+                      Navigator.pushNamed(context, TrackProgress.routeName);
                     },
                     child: Container(
                       color: Colors.red,
