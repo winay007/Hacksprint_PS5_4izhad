@@ -23,7 +23,7 @@ class _TrackProgressState extends State<TrackProgress> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Container(
+          SizedBox(
               height: 200, child: Image.asset("assets/images/authority.png")),
           Container(
             margin: const EdgeInsets.fromLTRB(0, 40, 0, 0),
@@ -31,6 +31,7 @@ class _TrackProgressState extends State<TrackProgress> {
             child: Row(
               children: [
                 Container(
+                  height: 10,
                   width: 100,
                   margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
                   decoration: BoxDecoration(
@@ -48,13 +49,14 @@ class _TrackProgressState extends State<TrackProgress> {
                 ),
                 Expanded(
                   child: Container(
+                    height: 10,
                     margin: const EdgeInsets.fromLTRB(0, 0, 20, 0),
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.only(
                           topRight: Radius.circular(10),
                           bottomRight: Radius.circular(10)),
                       border: Border.all(
-                        width: 8,
+                        width: 5,
                         color: const Color.fromARGB(255, 158, 120, 218),
                       ),
                       color: Colors.grey,

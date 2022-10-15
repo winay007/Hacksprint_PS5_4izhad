@@ -89,8 +89,8 @@ class _CreatePostState extends State<CreatePost> {
   }
 
   final titleController = TextEditingController();
-
   final descController = TextEditingController();
+  var issues = ["item 1"];
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +103,7 @@ class _CreatePostState extends State<CreatePost> {
         backgroundColor: Colors.white,
         elevation: 0,
         title: const Text(
-          'Create Post',
+          'Report issues',
           style: TextStyle(color: Colors.black),
         ),
       ),
@@ -120,6 +120,28 @@ class _CreatePostState extends State<CreatePost> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Row(
+                      // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        const Text(
+                          "Select the category",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+                          child: DropdownButton(
+                              value: "item 1",
+                              items: issues.map((String items) {
+                                return DropdownMenuItem(
+                                  value: items,
+                                  child: Text(items),
+                                );
+                              }).toList(),
+                              onChanged: (String? newValue) {}),
+                        ),
+                      ],
+                    ),
                     SelectImage(
                       size: size,
                       imagePickFn: _pickedImage,
@@ -154,7 +176,7 @@ class _CreatePostState extends State<CreatePost> {
                           child: ElevatedButton(
                               style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all(
-                                      Color.fromARGB(255, 22, 18, 1))),
+                                      const Color.fromARGB(255, 22, 18, 1))),
                               onPressed: () {
                                 _submitForm(
                                   title: titleController.text.trim(),
